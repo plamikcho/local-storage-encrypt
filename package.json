@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js",
-    "start": "webpack-dev-server --open"
+    "start": "webpack-dev-server"
   },
   "keywords": [
     "crypto",
@@ -15,6 +15,7 @@
   "author": "plamen",
   "license": "ISC",
   "dependencies": {
+    "@babel/polyfill": "^7.2.5",
     "bowser": "^2.1.2",
     "whatwg-fetch": "^3.0.0"
   },
