@@ -1,8 +1,6 @@
 import Bowser from "bowser";
 import cryptoWrapper from './crypto-wrapper';
-import { ab2str, str2ab } from './encoder';
-
-let temp = '';
+import { str2ab, ab2str } from './encoder';
 
 const addEventListenerById = (eventType, elementId, handler) => document.addEventListener(eventType, (event) => {
   const { target } = event;
@@ -23,24 +21,34 @@ const component = () => {
   return element;
 };
 
-const test = () => {
-  cryptoWrapper.encrypt('hey, welcome to the jungle. Български за проба !@№%!№$€!№$€№!§№!§')
+const setText = () => {
+  document.querySelector('input').value = 'hey, welcome to the jungle. Български за проба Ã€∞µΩ.|/\\"`;:<>?';
+};
+
+const getText = () => document.querySelector('input').value;
+
+document.body.appendChild(component());
+setText();
+
+addEventListenerById('click', 'button1', (e) => {
+  const iv = cryptoWrapper.getIv();
+  cryptoWrapper.encrypt(getText(), iv)
     .then((encrypted) => {
       const element = document.createElement('div');
       element.innerText = encrypted;
       document.body.appendChild(element);
-      temp = encrypted;
+      localStorage.setItem('test', JSON.stringify([encrypted, iv]));
     })
     .catch(err => console.log(err));
-};
+});
 
-document.body.appendChild(component());
-addEventListenerById('click', 'button', (e) => {
-  cryptoWrapper.decrypt(temp)
+addEventListenerById('click', 'button2', (e) => {
+  const [data, v] = JSON.parse(localStorage.getItem('test'));
+  const restoredIv = Object.keys(v).map(k => v[k]);
+  cryptoWrapper.decrypt(data, new Uint8Array(restoredIv))
     .then(decrypted => {
       const element = document.createElement('div');
       element.innerText = decrypted;
       document.body.appendChild(element);
     });
 });
-test();

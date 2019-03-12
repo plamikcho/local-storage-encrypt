@@ -1,10 +1,13 @@
 import { str2ab, ab2str } from './encoder';
 
-const mode = 'AES-GCM';
+const mode = 'AES-CBC';
 const targets = ["encrypt", "decrypt"];
 
 const rawKey = new Uint8Array(str2ab('1aa3eef61aa3eef6'));
-const iv = new Uint8Array(str2ab('ba0fde66'));
+
+const currentCrypto = window.crypto;
+
+const subtleCryptoProxy = (cryptoFunc, ...args) => cryptoFunc.apply(this, args);
 
 /*
 Import an AES secret key from an ArrayBuffer containing the raw bytes.
@@ -12,20 +15,20 @@ Takes an ArrayBuffer string containing the bytes, and returns a Promise
 that will resolve to a CryptoKey representing the secret key.
 */
 function importSecretKey(rawKey) {
-  return window.crypto.subtle.importKey(
+  return currentCrypto.subtle.importKey(
     "raw",
     rawKey,
     mode,
-    true,
+    false,
     targets
   );
 }
 
 function encryptMessage(key, iv, message) {
-  return window.crypto.subtle.encrypt(
+  return currentCrypto.subtle.encrypt(
     {
       name: mode,
-      iv: iv
+      iv,
     },
     key,
     str2ab(message)
@@ -33,28 +36,28 @@ function encryptMessage(key, iv, message) {
 }
 
 function decryptMessage(key, iv, ciphertext) {
-  return window.crypto.subtle.decrypt(
+  return currentCrypto.subtle.decrypt(
     {
-      name: "AES-GCM",
-      iv
+      name: mode,
+      iv,
     },
     key,
     ciphertext
   );
 }
 
-export default ((rawKey, iv) => {
+export default ((rawKey) => {
   return {
-    encrypt: message => importSecretKey(rawKey)
-      .then((cryptoKey) => {      
-        return encryptMessage(cryptoKey, iv, message);
-      })
-      .then(dec => ab2str(dec)),
-    decrypt: ciphertext => importSecretKey(rawKey)
+    encrypt: (message, iv) => subtleCryptoProxy(importSecretKey, rawKey)
       .then((cryptoKey) => {
-        const cipher = str2ab(ciphertext);
-        return decryptMessage(cryptoKey, iv, cipher);
+        return subtleCryptoProxy(encryptMessage, cryptoKey, iv, message);
+      })
+      .then(enc => ab2str(enc)),
+    decrypt: (ciphertext, iv) => subtleCryptoProxy(importSecretKey, rawKey)
+      .then((cryptoKey) => {
+        return subtleCryptoProxy(decryptMessage, cryptoKey, iv, str2ab(ciphertext));
       })
       .then(dec => ab2str(dec)),
+    getIv: () => subtleCryptoProxy(() => currentCrypto.getRandomValues(new Uint8Array(16)))
   };
-})(rawKey, iv);
+})(rawKey);
