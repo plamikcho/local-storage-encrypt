@@ -1,6 +1,7 @@
 import Bowser from "bowser";
-import cryptoWrapperFunc from './crypto-wrapper';
+import cryptoWrapperFunc, { pbkdf2 } from './crypto-wrapper';
 import { str2ab, ab2str } from './encoder';
+import { getEncryptedStorage } from './encrypted-storage';
 
 const addEventListenerById = (eventType, elementId, handler) => document.addEventListener(eventType, (event) => {
   const { target } = event;
@@ -30,29 +31,20 @@ const getText = () => document.querySelector('input').value;
 document.body.appendChild(component());
 setText();
 
-const rawKey = new Uint8Array(str2ab('1aa3eef61aa3eef6'));
-const cryptoWrapper = cryptoWrapperFunc(rawKey, window.crypto);
-
-
-addEventListenerById('click', 'button1', (e) => {
-  const iv = cryptoWrapper.getIv();
-  cryptoWrapper.encrypt(getText(), iv)
-    .then((encrypted) => {
-      const element = document.createElement('div');
-      element.innerText = encrypted;
-      document.body.appendChild(element);
-      localStorage.setItem('test', JSON.stringify([encrypted, iv]));
-    })
-    .catch(err => console.log(err));
-});
-
-addEventListenerById('click', 'button2', (e) => {
-  const [data, v] = JSON.parse(localStorage.getItem('test'));
-  const restoredIv = Object.keys(v).map(k => v[k]);
-  cryptoWrapper.decrypt(data, new Uint8Array(restoredIv))
-    .then(decrypted => {
+pbkdf2('agasdadadsgsdgasgdasgf', 'hsdhsdhsdhяверявет')
+  .then(rawKey => {
+    const cryptoWrapper = cryptoWrapperFunc(rawKey, window.crypto);
+    const encryptedStorage = getEncryptedStorage(localStorage, cryptoWrapper);
+    
+    addEventListenerById('click', 'button1', async (e) => {
+      await encryptedStorage.setItem('test', getText());
+    });
+    
+    addEventListenerById('click', 'button2', async (e) => {
+      const decrypted = await encryptedStorage.getItem('test');
       const element = document.createElement('div');
       element.innerText = decrypted;
       document.body.appendChild(element);
     });
-});
+  });
+
