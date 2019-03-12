@@ -9,7 +9,7 @@ export default (rawKey, currentCrypto) => {
   Takes an ArrayBuffer string containing the bytes, and returns a Promise
   that will resolve to a CryptoKey representing the secret key.
   */
-  const importSecretKey = (rawKey) => currentCrypto.subtle.importKey(
+  const importSecretKey = rawKey => currentCrypto.subtle.importKey(
     "raw",
     rawKey,
     name,
