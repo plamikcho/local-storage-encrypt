@@ -1,5 +1,5 @@
 import Bowser from "bowser";
-import cryptoWrapper from './crypto-wrapper';
+import cryptoWrapperFunc from './crypto-wrapper';
 import { str2ab, ab2str } from './encoder';
 
 const addEventListenerById = (eventType, elementId, handler) => document.addEventListener(eventType, (event) => {
@@ -29,6 +29,10 @@ const getText = () => document.querySelector('input').value;
 
 document.body.appendChild(component());
 setText();
+
+const rawKey = new Uint8Array(str2ab('1aa3eef61aa3eef6'));
+const cryptoWrapper = cryptoWrapperFunc(rawKey, window.crypto);
+
 
 addEventListenerById('click', 'button1', (e) => {
   const iv = cryptoWrapper.getIv();
