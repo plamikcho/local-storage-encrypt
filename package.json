@@ -1,8 +1,14 @@
 {
-  "name": "pbcrypto",
+  "name": "@plamikcho/pbcrypto",
   "version": "1.0.0",
   "description": "Password based AES encrypt/decrypt using web crypto api",
-  "private": true,
+  "private": false,
+  "main": "dist/index.js",
+  "homepage": "https://github.com/plamikcho/local-storage-encrypt.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plamikcho/local-storage-encrypt.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.prod.js",
@@ -12,6 +18,10 @@
     "crypto",
     "web",
     "pbkdf2"
+  ],
+  "files": [
+    "src/",
+    "dist/"
   ],
   "author": "plamen",
   "license": "ISC",
