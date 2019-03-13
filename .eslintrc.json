@@ -1,13 +1,13 @@
 {
   "parserOptions": {
-      "ecmaVersion": 2017,
-      "sourceType": "module",
-      "ecmaFeatures": {
-          "jsx": true
-      }
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "rules": {
-      "semi": "error"
+    "semi": "error"
   },
   "env": {
     "browser": true,

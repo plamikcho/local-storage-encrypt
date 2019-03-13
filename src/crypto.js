@@ -1,7 +1,7 @@
 import { str2ab, ab2str } from './encoder';
 import { PBKDF2 } from './lib/pbkdf2';
 
-export const pbkdf2 = (password, salt) => new Promise((resolve, reject) => {
+export const deriveRawKey = (password, salt) => new Promise((resolve, reject) => {
   const mypbkdf2 = new PBKDF2(password, salt, 1000, 8);
   const transformKey = key => {
     const rawKey = new Uint8Array(str2ab(key));
@@ -10,7 +10,7 @@ export const pbkdf2 = (password, salt) => new Promise((resolve, reject) => {
   mypbkdf2.deriveKey(() => {}, transformKey);
 });
 
-export default (rawKey, currentCrypto) => {
+export const getCryptoFunction = (rawKey, currentCrypto = window.crypto) => {
   
   const name = 'AES-CBC';
   const targets = ["encrypt", "decrypt"];
@@ -42,15 +42,13 @@ export default (rawKey, currentCrypto) => {
 
   return {
     encrypt: (message, iv) => importSecretKey(rawKey)
-      .then((cryptoKey) => {
-        return encryptMessage(cryptoKey, iv, str2ab(message));
-      })
+      .then((cryptoKey) => encryptMessage(cryptoKey, iv, str2ab(message)))
       .then(enc => ab2str(enc)),
     decrypt: (ciphertext, iv) => importSecretKey(rawKey)
-      .then((cryptoKey) => {
-        return decryptMessage(cryptoKey, iv, str2ab(ciphertext));
-      })
+      .then((cryptoKey) => decryptMessage(cryptoKey, iv, str2ab(ciphertext)))
       .then(dec => ab2str(dec)),
     getIv: () => currentCrypto.getRandomValues(new Uint8Array(16)),
   };
 };
+
+export const getPbCrypto = (password, salt) => deriveRawKey(password, salt).then(rawKey => getCryptoFunction(rawKey));
