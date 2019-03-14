@@ -1,5 +1,6 @@
 import Bowser from "bowser";
 import { ab2str8, str2ab8 } from './encoder';
+import { getPbCrypto } from './crypto';
 
 export const isBrowserSupported = ((userAgent = window.navigator.userAgent) => {
   const supportedBrowsers = ['chrome', 'firefox'];
@@ -7,7 +8,7 @@ export const isBrowserSupported = ((userAgent = window.navigator.userAgent) => {
   return supportedBrowsers.filter(browser => parser.is(browser)).length > 0;
 })();
 
-export const getEncryptedStorage = (storage, cryptoWrapper) => {
+export const getEncryptedStorageFromCrypto = (storage, cryptoWrapper) => {
   const unmodifiedFunctions = {
     removeItem(key) {
       storage.removeItem(key);
@@ -59,4 +60,17 @@ export const getEncryptedStorage = (storage, cryptoWrapper) => {
       },
       ...unmodifiedFunctions,
   };
+};
+
+const getEncryptedStorageFromPassword = (storage, password, salt) => getPbCrypto(password, salt)
+  .then(cryptoWrapper => getEncryptedStorage(storage, cryptoWrapper));
+
+export const getEncryptedStorage = (storage, ...args) => {
+  const [arg1, arg2] = args;
+  if (typeof arg1 === 'object') { // it is crypto object
+    return getEncryptedStorageFromCrypto(storage, arg1);
+  }
+  if (typeof arg1 === 'string' && typeof arg2 === 'string') {
+    return getEncryptedStorageFromPassword(storage, arg1, arg2);
+  }
 };

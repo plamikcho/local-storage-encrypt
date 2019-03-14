@@ -1,7 +1,7 @@
 import Bowser from "bowser";
 import myCrypto from './index';
 
-const { getPbCrypto, getEncryptedStorage, isBrowserSupported } = myCrypto;
+const { getEncryptedStorage, isBrowserSupported } = myCrypto;
 
 const addEventListenerById = (eventType, elementId, handler) => document.addEventListener(eventType, (event) => {
   const { target } = event;
@@ -31,10 +31,8 @@ const getText = () => document.querySelector('input').value;
 printBrowserVersion();
 setText();
 
-getPbCrypto('mysupersecret', 'salt')
-  .then(cryptoWrapper => {
-    const encryptedStorage = getEncryptedStorage(localStorage, cryptoWrapper);
-    
+getEncryptedStorage(localStorage, 'mysupersecret', 'salt')
+  .then(encryptedStorage => {
     addEventListenerById('click', 'button1', async () => {
       await encryptedStorage.setItem('test', getText());
     });

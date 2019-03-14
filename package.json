@@ -25,7 +25,6 @@
   ],
   "author": "plamen",
   "license": "ISC",
-  "bundleDependencies": false,
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
     "bowser": "^2.1.2",
