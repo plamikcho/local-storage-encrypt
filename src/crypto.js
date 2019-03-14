@@ -1,7 +1,7 @@
 import { str2ab, ab2str } from './encoder';
 
 export const getPbCrypto = (password, salt, currentCrypto = window.crypto) => {
-  const name = 'AES-CBC';
+  const name = 'AES-GCM';
   const targets = ["encrypt", "decrypt"];
   const pbkdfName = 'PBKDF2';
   const hash = { name: 'SHA-256', length: 256 };
