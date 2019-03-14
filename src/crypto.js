@@ -1,32 +1,33 @@
 import { str2ab, ab2str } from './encoder';
-import { PBKDF2 } from './lib/pbkdf2';
 
-export const deriveRawKey = (password, salt) => new Promise((resolve, reject) => {
-  const mypbkdf2 = new PBKDF2(password, salt, 1000, 8);
-  const transformKey = key => {
-    const rawKey = new Uint8Array(str2ab(key));
-    resolve(rawKey);
-  };
-  mypbkdf2.deriveKey(() => {}, transformKey);
-});
-
-export const getCryptoFunction = (rawKey, currentCrypto = window.crypto) => {
-  
+export const getPbCrypto = (password, salt, currentCrypto = window.crypto) => {
   const name = 'AES-CBC';
   const targets = ["encrypt", "decrypt"];
+  const pbkdfName = 'PBKDF2';
+  const hash = { name: 'SHA-256', length: 256 };
+  const iterations = 10000;
 
-  /*
-  Import an AES secret key from an ArrayBuffer containing the raw bytes.
-  Takes an ArrayBuffer string containing the bytes, and returns a Promise
-  that will resolve to a CryptoKey representing the secret key.
-  */
-  const importSecretKey = rawKey => currentCrypto.subtle.importKey(
-    "raw",
-    rawKey,
-    name,
-    false,
-    targets
-  );
+  const deriveKey = async (password, salt, currentCrypto = window.crypto) => {
+    const keyMaterial = await currentCrypto.subtle.importKey(
+      "raw",
+      str2ab(password),
+      { name: pbkdfName },
+      false,
+      ["deriveBits", "deriveKey"]
+    );
+    return currentCrypto.subtle.deriveKey(
+      {
+        name: pbkdfName,
+        salt: str2ab(salt),
+        iterations,
+        hash: hash.name,
+      },
+      keyMaterial,
+      { name, length: hash.length },
+      true,
+      targets,
+    );
+  };
 
   const encryptMessage = (key, iv, encodedText) => currentCrypto.subtle.encrypt(
     { name, iv },
@@ -40,15 +41,15 @@ export const getCryptoFunction = (rawKey, currentCrypto = window.crypto) => {
     ciphertext
   );
 
-  return {
-    encrypt: (message, iv) => importSecretKey(rawKey)
-      .then((cryptoKey) => encryptMessage(cryptoKey, iv, str2ab(message)))
-      .then(enc => ab2str(enc)),
-    decrypt: (ciphertext, iv) => importSecretKey(rawKey)
-      .then((cryptoKey) => decryptMessage(cryptoKey, iv, str2ab(ciphertext)))
-      .then(dec => ab2str(dec)),
-    getIv: () => currentCrypto.getRandomValues(new Uint8Array(16)),
-  };
-};
+  const encrypt = (message, iv) => deriveKey(password, salt)
+  .then(cryptoKey => encryptMessage(cryptoKey, iv, str2ab(message)))
+  .then(enc => ab2str(enc));
 
-export const getPbCrypto = (password, salt) => deriveRawKey(password, salt).then(rawKey => getCryptoFunction(rawKey));
+  const decrypt = (ciphertext, iv) => deriveKey(password, salt)
+  .then(cryptoKey => decryptMessage(cryptoKey, iv, str2ab(ciphertext)))
+  .then(dec => ab2str(dec));
+
+  const getIv = () => currentCrypto.getRandomValues(new Uint8Array(16));
+
+  return { encrypt, decrypt, getIv };
+};

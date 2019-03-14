@@ -31,16 +31,15 @@ const getText = () => document.querySelector('input').value;
 printBrowserVersion();
 setText();
 
-getEncryptedStorage(localStorage, 'mysupersecret', 'salt')
-  .then(encryptedStorage => {
-    addEventListenerById('click', 'button1', async () => {
-      await encryptedStorage.setItem('test', getText());
-    });
-    
-    addEventListenerById('click', 'button2', async () => {
-      const decrypted = await encryptedStorage.getItem('test');
-      const element = document.createElement('div');
-      element.innerText = decrypted;
-      document.body.appendChild(element);
-    });
-  });
+const encryptedStorage = getEncryptedStorage(localStorage, 'mysupersecret', 'salt');
+
+addEventListenerById('click', 'button1', async () => {
+  await encryptedStorage.setItem('test', getText());
+});
+
+addEventListenerById('click', 'button2', async () => {
+  const decrypted = await encryptedStorage.getItem('test');
+  const element = document.createElement('div');
+  element.innerText = decrypted;
+  document.body.appendChild(element);
+});
