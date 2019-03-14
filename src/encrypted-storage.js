@@ -34,7 +34,7 @@ export const getEncryptedStorageFromCrypto = (storage, cryptoWrapper) => {
           }
           catch (error) {
             console.error(`Cannot set encrypted value for ${key}. Error: ${error}`);
-            storage.setItem(key, value);
+            throw error;
           }
         },
         async getItem(key) {
@@ -45,7 +45,7 @@ export const getEncryptedStorageFromCrypto = (storage, cryptoWrapper) => {
           }
           catch (error) {
             console.error(`Cannot get encrypted item for ${key}. Error: ${error}`);
-            return storage.getItem(key);
+            return null;
           }
         },
         ...unmodifiedFunctions,
