@@ -62,7 +62,7 @@ export const getEncryptedStorageFromCrypto = (storage, cryptoWrapper) => {
   };
 };
 
-const getEncryptedStorageFromPassword = (storage, password, salt) => getEncryptedStorage(storage, getPbCrypto(password, salt));
+const getEncryptedStorageFromPassword = (storage, password, salt) => getEncryptedStorageFromCrypto(storage, getPbCrypto(password, salt));
 
 export const getEncryptedStorage = (storage, ...args) => {
   const [arg1, arg2] = args;
