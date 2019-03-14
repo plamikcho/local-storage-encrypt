@@ -5,7 +5,7 @@ export const getPbCrypto = (password, salt, currentCrypto = window.crypto) => {
   const targets = ["encrypt", "decrypt"];
   const pbkdfName = 'PBKDF2';
   const hash = { name: 'SHA-256', length: 256 };
-  const iterations = 10000;
+  const iterations = 1000;
 
   const deriveKey = async (password, salt, currentCrypto = window.crypto) => {
     const keyMaterial = await currentCrypto.subtle.importKey(
