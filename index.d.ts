@@ -1,3 +1,5 @@
+import { str2ab8 } from "./src/encoder";
+
 // Type definitions for PbCrypto v1
 // Project: https://github.com/plamikcho/local-storage-encrypt
 
@@ -27,6 +29,18 @@ declare namespace PbCrypto {
    * @param userAgent Navigator userAgent
    */
   function isBrowserSupported(userAgent: string): boolean;
+
+  /**
+   * Encodes buffer into string using Uint8Array
+   * @param buf buffer to encode
+   */
+  function ab2str8(buf: ArrayBuffer): string;
+
+  /**
+   * Decodes previously encoded ArrayBuffer using Uint8Array
+   * @param str encoded string
+   */
+  function str2ab8(str: string): ArrayBuffer;
 
   interface ICrypto {
     /**
