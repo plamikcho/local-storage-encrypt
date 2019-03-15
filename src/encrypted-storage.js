@@ -9,10 +9,8 @@ export const isBrowserSupported = ((userAgent = window.navigator.userAgent) => {
 })();
 
 export const getEncryptedStorageFromCrypto = (storage, cryptoWrapper) => {
+  const suffix = '_iv';
   const unmodifiedFunctions = {
-    removeItem(key) {
-      storage.removeItem(key);
-    },
     clear() {
       storage.clear();
     },
@@ -30,7 +28,8 @@ export const getEncryptedStorageFromCrypto = (storage, cryptoWrapper) => {
           try {
             const iv = cryptoWrapper.getIv(); // getting iv per item
             const encrypted = await cryptoWrapper.encrypt(value, iv);
-            storage.setItem(key, JSON.stringify([encrypted, ab2str8(iv)]));
+            storage.setItem(key, String(encrypted));
+            storage.setItem(`${key}${suffix}`, ab2str8(iv));
           }
           catch (error) {
             console.error(`Cannot set encrypted value for ${key}. Error: ${error}`);
@@ -39,7 +38,8 @@ export const getEncryptedStorageFromCrypto = (storage, cryptoWrapper) => {
         },
         async getItem(key) {
           try {
-            const [data, iv] = JSON.parse(storage.getItem(key));
+            const data = storage.getItem(key);
+            const iv = storage.getItem(`${key}${suffix}`);
             const decrypted = await cryptoWrapper.decrypt(data, str2ab8(iv));
             return decrypted;
           }
@@ -48,6 +48,11 @@ export const getEncryptedStorageFromCrypto = (storage, cryptoWrapper) => {
             return null;
           }
         },
+        removeItem(key) {
+          storage.removeItem(key);
+          storage.removeItem(`${key}${suffix}`);
+        },
+        
         ...unmodifiedFunctions,
       }
   : {
@@ -57,6 +62,9 @@ export const getEncryptedStorageFromCrypto = (storage, cryptoWrapper) => {
       },
       async getItem(key) {        
         return storage.getItem(key);
+      },
+      removeItem(key) {
+        storage.removeItem(key);
       },
       ...unmodifiedFunctions,
   };
