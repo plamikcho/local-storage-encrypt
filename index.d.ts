@@ -28,7 +28,7 @@ declare namespace PbCrypto {
    * Returns if browser is supported. Currently supported browsers are Chrome and Firefox
    * @param userAgent Navigator userAgent
    */
-  type isBrowserSupported = boolean;
+  function isBrowserSupported(userAgent: string): boolean;
 
   /**
    * Encodes buffer into string using Uint8Array

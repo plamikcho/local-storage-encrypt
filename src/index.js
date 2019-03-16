@@ -6,6 +6,4 @@ export default {
   getPbCrypto,
   getEncryptedStorage,
   isBrowserSupported,
-  ab2str8,
-  str2ab8,
 };

@@ -2,11 +2,11 @@ import Bowser from "bowser";
 import { ab2str8, str2ab8 } from './encoder';
 import { getPbCrypto } from './crypto';
 
-export const isBrowserSupported = ((userAgent = window.navigator.userAgent) => {
+export const isBrowserSupported = (userAgent = window.navigator.userAgent) => {
   const supportedBrowsers = ['chrome', 'firefox'];
   const parser = Bowser.getParser(userAgent);
   return supportedBrowsers.filter(browser => parser.is(browser)).length > 0;
-})();
+};
 
 export const getEncryptedStorageFromCrypto = (storage, cryptoWrapper) => {
   const suffix = '_iv';
@@ -22,7 +22,7 @@ export const getEncryptedStorageFromCrypto = (storage, cryptoWrapper) => {
     },
   };
 
-  return isBrowserSupported
+  return isBrowserSupported()
     ? {
         async setItem(key, value) {
           try {
