@@ -1,5 +1,11 @@
 import { str2ab, ab2str } from './encoder';
 
+/**
+ * Creates an instance of PbCrypto with encrypt and decrypt operations
+ * @param {String} password
+ * @param {String} salt
+ * @param {Crypto} currentCrypto - window.crypto instance
+ */
 export const getPbCrypto = (password, salt, currentCrypto = window.crypto) => {
   const name = 'AES-GCM';
   const targets = ["encrypt", "decrypt"];

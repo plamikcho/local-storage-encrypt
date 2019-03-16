@@ -23,10 +23,10 @@ const printBrowserVersion = () => {
 };
 
 const setText = () => {
-  document.querySelector('input').value = 'hey, welcome to the jungle. Български за проба Ã€∞µΩ.|/\\"`;:<>?';
+  document.querySelector('textarea').value = 'hey, welcome to the jungle. Български за проба Ã€∞µΩ.|/\\"`;:<>?';
 };
 
-const getText = () => document.querySelector('input').value;
+const getText = () => document.querySelector('textarea').value;
 
 printBrowserVersion();
 setText();

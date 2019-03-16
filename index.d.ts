@@ -30,18 +30,6 @@ declare namespace PbCrypto {
    */
   function isBrowserSupported(userAgent: string): boolean;
 
-  /**
-   * Encodes buffer into string using Uint8Array
-   * @param buf buffer to encode
-   */
-  function ab2str8(buf: ArrayBuffer): string;
-
-  /**
-   * Decodes previously encoded ArrayBuffer using Uint8Array
-   * @param str encoded string
-   */
-  function str2ab8(str: string): ArrayBuffer;
-
   interface ICrypto {
     /**
      * Encrypts unicode text
