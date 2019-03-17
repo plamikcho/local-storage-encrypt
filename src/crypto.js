@@ -48,12 +48,12 @@ export const getPbCrypto = (password, salt, currentCrypto = window.crypto) => {
   );
 
   const encrypt = (message, iv) => deriveKey(password, salt)
-  .then(cryptoKey => encryptMessage(cryptoKey, iv, str2ab(message)))
-  .then(enc => ab2str(enc));
+    .then(cryptoKey => encryptMessage(cryptoKey, iv, str2ab(message)))
+    .then(enc => ab2str(enc));
 
   const decrypt = (ciphertext, iv) => deriveKey(password, salt)
-  .then(cryptoKey => decryptMessage(cryptoKey, iv, str2ab(ciphertext)))
-  .then(dec => ab2str(dec));
+    .then(cryptoKey => decryptMessage(cryptoKey, iv, str2ab(ciphertext)))
+    .then(dec => ab2str(dec));
 
   const getIv = () => currentCrypto.getRandomValues(new Uint8Array(16));
 
