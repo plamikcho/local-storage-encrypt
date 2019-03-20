@@ -18,6 +18,10 @@ Supported browsers at the moment: Firefox and Chrome. MDN says that Edge also sh
 
 ## Changelog
 
+### 2.1.0
+
+- Babel polyfill removed (MS browsers support)
+
 ### 2.0.0
 
 - Bowser is removed from the library. Now it is 6k minified.
