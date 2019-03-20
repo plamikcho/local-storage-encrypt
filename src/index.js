@@ -1,8 +1,7 @@
 import { getPbCrypto } from './crypto'; 
-import { getEncryptedStorage, isBrowserSupported } from './encrypted-storage';
+import { getEncryptedStorage } from './encrypted-storage';
 
 export default {
   getPbCrypto,
   getEncryptedStorage,
-  isBrowserSupported,
 };

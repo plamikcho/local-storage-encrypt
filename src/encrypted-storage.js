@@ -1,16 +1,5 @@
-import Bowser from "bowser";
 import { ab2str8, str2ab8 } from './encoder';
 import { getPbCrypto } from './crypto';
-
-/**
- * Returns if browser is supported or not
- * @param {String} userAgent navigator.userAgent
- */
-export const isBrowserSupported = (userAgent = window.navigator.userAgent) => {
-  const supportedBrowsers = ['chrome', 'firefox'];
-  const parser = Bowser.getParser(userAgent);
-  return supportedBrowsers.filter(browser => parser.is(browser)).length > 0;
-};
 
 /**
  * Gets encrypted storage with async getItem and setItem
@@ -34,51 +23,36 @@ export const getEncryptedStorageFromCrypto = (storage, cryptoWrapper) => {
     },
   };
 
-  return isBrowserSupported()
-    ? {
-        async setItem(key, value) {
-          try {
-            const iv = cryptoWrapper.getIv(); // getting iv per item
-            const encrypted = await cryptoWrapper.encrypt(value, iv);
-            storage.setItem(key, String(encrypted));
-            storage.setItem(getIvKey(key), ab2str8(iv));
-          }
-          catch (error) {
-            console.error(`Cannot set encrypted value for ${key}. Error: ${error}`);
-            throw error;
-          }
-        },
-        async getItem(key) {
-          try {
-            const data = storage.getItem(key);
-            const iv = storage.getItem(getIvKey(key));
-            const decrypted = await cryptoWrapper.decrypt(data, str2ab8(iv));
-            return decrypted;
-          }
-          catch (error) {
-            console.error(`Cannot get encrypted item for ${key}. Error: ${error}`);
-            return null;
-          }
-        },
-        removeItem(key) {
-          storage.removeItem(key);
-          storage.removeItem(getIvKey(key));
-        },
-        
-        ...unmodifiedFunctions,
+  return {
+    async setItem(key, value) {
+      try {
+        const iv = cryptoWrapper.getIv(); // getting iv per item
+        const encrypted = await cryptoWrapper.encrypt(value, iv);
+        storage.setItem(key, String(encrypted));
+        storage.setItem(getIvKey(key), ab2str8(iv));
       }
-  : {
-      // async too for consistent interface
-      async setItem(key, value) {
-        storage.setItem(key, value);
-      },
-      async getItem(key) {        
-        return storage.getItem(key);
-      },
-      removeItem(key) {
-        storage.removeItem(key);
-      },
-      ...unmodifiedFunctions,
+      catch (error) {
+        console.error(`Cannot set encrypted value for ${key}. Error: ${error}`);
+        throw error;
+      }
+    },
+    async getItem(key) {
+      try {
+        const data = storage.getItem(key);
+        const iv = storage.getItem(getIvKey(key));
+        const decrypted = await cryptoWrapper.decrypt(data, str2ab8(iv));
+        return decrypted;
+      }
+      catch (error) {
+        console.error(`Cannot get encrypted item for ${key}. Error: ${error}`);
+        return null;
+      }
+    },
+    removeItem(key) {
+      storage.removeItem(key);
+      storage.removeItem(getIvKey(key));
+    },
+    ...unmodifiedFunctions,
   };
 };
 

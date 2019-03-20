@@ -23,12 +23,6 @@ declare namespace PbCrypto {
    * @param salt Some salt - generated or supplied
    */
   function getEncryptedStorage(storage: Storage, password: string, salt: string): IAsyncStorage;
-  
-  /**
-   * Returns if browser is supported. Currently supported browsers are Chrome and Firefox
-   * @param userAgent Navigator userAgent
-   */
-  function isBrowserSupported(userAgent: string): boolean;
 
   interface ICrypto {
     /**

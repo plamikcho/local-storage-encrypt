@@ -35,6 +35,9 @@ const encryptedStorage = getEncryptedStorage(localStorage, 'mysupersecret', 'sal
 
 addEventListenerById('click', 'button1', async () => {
   await encryptedStorage.setItem('test', getText());
+  const element = document.createElement('div');
+  element.innerText = 'Encrypted!';
+  document.body.appendChild(element);
 });
 
 addEventListenerById('click', 'button2', async () => {

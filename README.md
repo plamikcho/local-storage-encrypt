@@ -15,3 +15,10 @@ encryptedStorage.setItem('test', 'Some text to store encrypted')
   .catch(error => console.log(error));
 ```
 Supported browsers at the moment: Firefox and Chrome. MDN says that Edge also should work but it doesn't (at least I was not able to find the proper input params). Any help will be appreciated.
+
+## Changelog
+
+### 1.7.5
+
+- Bowser is removed from the library. Now it is 6k minified.
+- The issue with large strings is partially solved, at least for the sizes supported by localStorage (=< 10 MB)
