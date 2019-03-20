@@ -1,6 +1,6 @@
 {
   "name": "@plamikcho/pbcrypto",
-  "version": "1.7.4",
+  "version": "2.0.0",
   "description": "Password based AES encrypt/decrypt using web crypto api",
   "private": false,
   "main": "dist/index.js",
