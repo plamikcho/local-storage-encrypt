@@ -24,10 +24,13 @@ Supported browsers at the moment: Firefox and Chrome. MDN says that Edge also sh
 
 ## Changelog
 
+### 2.1.2
+
+- Babel configuration fixed
+
 ### 2.1.1
 
 - Example fixed (broken on previous version)
-- Babel configuration fixed
 
 ### 2.1.0
 
