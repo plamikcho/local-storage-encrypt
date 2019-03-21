@@ -14,9 +14,20 @@ encryptedStorage.setItem('test', 'Some text to store encrypted')
   .then(item => console.log(item));
   .catch(error => console.log(error));
 ```
+
+```
+// TODO: write an example for the crypto
+```
+
+
 Supported browsers at the moment: Firefox and Chrome. MDN says that Edge also should work but it doesn't (at least I was not able to find the proper input params). Any help will be appreciated.
 
 ## Changelog
+
+### 2.1.1
+
+- Example fixed (broken on previous version)
+- Babel configuration fixed
 
 ### 2.1.0
 
