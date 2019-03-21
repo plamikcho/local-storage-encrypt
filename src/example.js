@@ -1,7 +1,7 @@
 import Bowser from "bowser";
 import myCrypto from './index';
 
-const { getEncryptedStorage, isBrowserSupported } = myCrypto;
+const { getEncryptedStorage } = myCrypto;
 
 const addEventListenerById = (eventType, elementId, handler) => document.addEventListener(eventType, (event) => {
   const { target } = event;
@@ -11,8 +11,10 @@ const addEventListenerById = (eventType, elementId, handler) => document.addEven
 });
 
 const getBrowserVersion = () => {
+  const supportedBrowsers = ['chrome', 'firefox'];
   const parser = Bowser.getParser(window.navigator.userAgent);
   const { name, version } = parser.getBrowser();
+  const isBrowserSupported = supportedBrowsers.filter(browser => parser.is(browser)).length > 0;
   return `Your browser is: ${name} ${version} and is ${isBrowserSupported ? '' : 'not'} supported`;
 };
 

@@ -31,6 +31,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@babel/polyfill": "^7.2.5",
     "bowser": "^2.1.2",
     "whatwg-fetch": "^3.0.0"
   },
