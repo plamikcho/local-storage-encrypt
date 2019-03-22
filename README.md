@@ -30,6 +30,10 @@ Supported browsers at the moment: Firefox and Chrome. MDN says that Edge also sh
 
 ## Changelog
 
+### 2.1.4
+
+- Typings cleaned from unused import
+
 ### 2.1.3
 
 - Babel configuration fixed in /dist folder

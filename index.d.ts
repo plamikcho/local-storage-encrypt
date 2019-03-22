@@ -1,5 +1,3 @@
-import { str2ab8 } from "./src/encoder";
-
 // Type definitions for PbCrypto v1
 // Project: https://github.com/plamikcho/local-storage-encrypt
 
