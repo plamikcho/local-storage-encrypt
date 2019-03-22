@@ -60,6 +60,6 @@ declare namespace PbCrypto {
     /**
      * storage[key] = value
      */
-    setItem(key: string, value: string): Promise<any>;
+    setItem(key: string, value: string): Promise<void>;
   }
 }
