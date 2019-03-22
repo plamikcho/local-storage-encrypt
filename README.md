@@ -30,6 +30,12 @@ Supported browsers at the moment: Firefox and Chrome. MDN says that Edge also sh
 
 ## Changelog
 
+### 2.1.3
+
+- Babel configuration fixed in /dist folder
+- Example added for encrypt/decrypt
+- Typings fixes
+
 ### 2.1.2
 
 - Babel configuration fixed
