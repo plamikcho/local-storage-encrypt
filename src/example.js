@@ -1,7 +1,7 @@
 import Bowser from "bowser";
 import myCrypto from './index';
 
-const { getEncryptedStorage } = myCrypto;
+const { getEncryptedStorage, getPbCrypto } = myCrypto;
 
 const addEventListenerById = (eventType, elementId, handler) => document.addEventListener(eventType, (event) => {
   const { target } = event;
@@ -48,3 +48,9 @@ addEventListenerById('click', 'button2', async () => {
   element.innerText = decrypted;
   document.body.appendChild(element);
 });
+
+// const cryptoWrapper = getPbCrypto('secret', 'pepper');
+// const iv = cryptoWrapper.getIv();
+// cryptoWrapper.encrypt('ДобАр ден,аз съм вашта леля!', iv)
+//   .then(encrypted => cryptoWrapper.decrypt(encrypted, iv))
+//   .then((decrypted) => console.log(decrypted));

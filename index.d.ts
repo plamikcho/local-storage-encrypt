@@ -24,20 +24,28 @@ declare namespace PbCrypto {
    */
   function getEncryptedStorage(storage: Storage, password: string, salt: string): IAsyncStorage;
 
+  /**
+   * Wraps browser storage with encrypt/decrypt functionality
+   * 
+   * @param storage Browser storage or compatible (localStorage, sessionStorage)
+   * @param crypto 
+   */
+  function getEncryptedStorage(storage: Storage, crypto: ICrypto): IAsyncStorage;
+
   interface ICrypto {
     /**
      * Encrypts unicode text
      * @param message Text to encrypt
      * @param iv Initialization vector
      */
-    encrypt(message: string, iv: ArrayBuffer): string,
+    encrypt(message: string, iv: ArrayBuffer): Promise<string>,
 
     /**
      * Decrypts encrypted string
      * @param ciphertext Encrypted string
      * @param iv Initialization vector
      */
-    decrypt(ciphertext: string, iv: ArrayBuffer): string,
+    decrypt(ciphertext: string, iv: ArrayBuffer): Promise<string>,
 
     /**
      * Gets iv

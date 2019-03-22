@@ -15,8 +15,14 @@ encryptedStorage.setItem('test', 'Some text to store encrypted')
   .catch(error => console.log(error));
 ```
 
-```
-// TODO: write an example for the crypto
+If you don't need the storage, here is it:
+
+```javascript
+const cryptoWrapper = getPbCrypto('secret', 'pepper');
+const iv = cryptoWrapper.getIv();
+cryptoWrapper.encrypt('ДобАр ден,аз съм вашта леля!', iv)
+  .then(encrypted => cryptoWrapper.decrypt(encrypted, iv))
+  .then((decrypted) => console.log(decrypted));
 ```
 
 

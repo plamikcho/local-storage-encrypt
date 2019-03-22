@@ -2,8 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    example: ['./src/example.js'],
-    
+    example: ['@babel/polyfill', './src/example.js'],
     index: './src/index.js',
   },
   module: {
