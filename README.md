@@ -30,7 +30,7 @@ Supported browsers at the moment: Firefox and Chrome. MDN says that Edge also sh
 
 ## Changelog
 
-### 2.1.5
+### 2.2.1
 
 - Bowser removed, browser detection is changed to feature detection
 - isBrowserSupported method is restored as a promise. This method is used internally in encrypted storage
