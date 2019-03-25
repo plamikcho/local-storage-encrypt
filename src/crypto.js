@@ -59,3 +59,20 @@ export const getPbCrypto = (password, salt, currentCrypto = window.crypto) => {
 
   return { encrypt, decrypt, getIv };
 };
+
+/**
+ * Determines whether current browser supports WebCrypto API using feature detection
+ */
+export const isBrowserSupported = async () => {
+  const testMessage = 'w?';
+  try {
+    const cryptoWrapper = getPbCrypto('a', 'b');
+    const iv = cryptoWrapper.getIv();
+    const encrypted = await cryptoWrapper.encrypt(testMessage, iv);
+    const decrypted = await cryptoWrapper.decrypt(encrypted, iv);
+    return decrypted === testMessage;
+  } catch (error) {
+    console.warn('Your browser does not support WebCrypto API', error);
+    return false;
+  }
+};

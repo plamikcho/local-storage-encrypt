@@ -30,6 +30,12 @@ declare namespace PbCrypto {
    */
   function getEncryptedStorage(storage: Storage, crypto: ICrypto): IAsyncStorage;
 
+  /**
+   * Determines whether current browser supports WebCrypto API using feature detection
+   * Currently supported browsers are Chrome and Firefox
+   */
+  function isBrowserSupported(): Promise<boolean>;
+
   interface ICrypto {
     /**
      * Encrypts unicode text

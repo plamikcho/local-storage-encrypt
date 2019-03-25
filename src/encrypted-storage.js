@@ -1,22 +1,5 @@
 import { ab2str8, str2ab8 } from './encoder';
-import { getPbCrypto } from './crypto';
-
-/**
- * Determines whether current browser supports WebCrypto API using feature detection
- */
-const isBrowserSupported = async () => {
-  const testMessage = 'w?';
-  try {
-    const cryptoWrapper = getPbCrypto('a', 'b');
-    const iv = cryptoWrapper.getIv();
-    const encrypted = await cryptoWrapper.encrypt(testMessage, iv);
-    const decrypted = await cryptoWrapper.decrypt(encrypted, iv);
-    return decrypted === testMessage;
-  } catch (error) {
-    console.warn('Your browser does not support WebCrypto API', error);
-    return false;
-  }
-};
+import { getPbCrypto, isBrowserSupported } from './crypto';
 
 /**
  * Gets encrypted storage with async getItem and setItem
@@ -84,6 +67,7 @@ export const getEncryptedStorageFromCrypto = (storage, cryptoWrapper) => {
     },
     removeItem(key) {
       storage.removeItem(key);
+
       const ivKey = getIvKey(key);
       storage.getItem(ivKey) && storage.removeItem(ivKey);
     },

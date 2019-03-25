@@ -30,6 +30,11 @@ Supported browsers at the moment: Firefox and Chrome. MDN says that Edge also sh
 
 ## Changelog
 
+### 2.1.5
+
+- Bowser removed, browser detection is changed to feature detection
+- isBrowserSupported method is restored as a promise. This method is used internally in encrypted storage
+
 ### 2.1.4
 
 - Typings cleaned from unused import

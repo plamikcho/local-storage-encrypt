@@ -1,5 +1,5 @@
-import Bowser from "bowser";
 import myCrypto from './index';
+import { isBrowserSupported } from './crypto';
 
 const { getEncryptedStorage, getPbCrypto } = myCrypto;
 
@@ -10,35 +10,22 @@ const addEventListenerById = (eventType, elementId, handler) => document.addEven
   }
 });
 
-const getBrowserVersion = () => {
-  const supportedBrowsers = ['chrome', 'firefox'];
-  const parser = Bowser.getParser(window.navigator.userAgent);
-  const { name, version } = parser.getBrowser();
-  const isBrowserSupported = supportedBrowsers.filter(browser => parser.is(browser)).length > 0;
-  return `Your browser is: ${name} ${version} and is ${isBrowserSupported ? '' : 'not'} supported`;
-};
-
-const printBrowserVersion = () => {
-  const element = document.createElement('div');
-  element.innerHTML = getBrowserVersion();
-  document.body.appendChild(element);
-};
-
 const setText = () => {
   document.querySelector('textarea').value = 'hey, welcome to the jungle. Български за проба Ã€∞µΩ.|/\\"`;:<>?';
 };
 
 const getText = () => document.querySelector('textarea').value;
 
-printBrowserVersion();
 setText();
 
 const encryptedStorage = getEncryptedStorage(localStorage, 'mysupersecret', 'salt');
 
 addEventListenerById('click', 'button1', async () => {
+  const isSupported = await isBrowserSupported();
   await encryptedStorage.setItem('test', getText());
   const element = document.createElement('div');
-  element.innerText = 'Encrypted!';
+  element.setAttribute('style', `color: ${isSupported ? 'green' : 'red'}`);
+  element.innerText = `Text stored ${isSupported ? 'encrypted' : 'plain (WebCrypto API not supported by this browser)'}!`;
   document.body.appendChild(element);
 });
 
